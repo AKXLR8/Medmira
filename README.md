@@ -42,7 +42,7 @@ docker compose up -d mongo
 # 5️⃣ Run the app
 python app.py
 # App runs on http://0.0.0.0:8080
-````
+```
 
 ---
 
