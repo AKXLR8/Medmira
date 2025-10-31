@@ -136,36 +136,23 @@ backend/
 
 ## 🧩 System Architecture
 
-## 🧩 System Architecture
-
 ```mermaid
 flowchart TD
-  A[Prescription Image Upload / Manual Entry] --> B[Vision OCR (Google Cloud Vision API)]
+  A[Prescription Upload or Manual Entry] --> B[Vision OCR using Google Cloud API]
   B --> C[GLiNER Medical NER Extraction]
-  C --> D[Prescription Parser & Validation]
+  C --> D[Prescription Parser and Validation]
   D --> E[(MongoDB Database)]
   E --> F[Twilio WhatsApp Reminder Service]
-  F --> G[Alarm Scheduler (Frequency & Duration Based)]
-  
-  subgraph "Auth Service"
+  F --> G[Alarm Scheduler based on Frequency and Duration]
+
+  subgraph Auth_Service
     H1[POST /api/register]
     H2[POST /api/login]
   end
-  
+
   H1 --> E
   H2 --> E
-
-  style A fill:#282c34,stroke:#9b59b6,color:#fff
-  style B fill:#2e4053,stroke:#f39c12,color:#fff
-  style C fill:#34495e,stroke:#1abc9c,color:#fff
-  style D fill:#273746,stroke:#3498db,color:#fff
-  style E fill:#212f3d,stroke:#2ecc71,color:#fff
-  style F fill:#1b2631,stroke:#e74c3c,color:#fff
-  style G fill:#17202a,stroke:#9b59b6,color:#fff
-  style H1 fill:#283747,stroke:#f1c40f,color:#fff
-  style H2 fill:#283747,stroke:#f1c40f,color:#fff
 ```
-
 
 ---
 
