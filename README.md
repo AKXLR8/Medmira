@@ -2,6 +2,7 @@
 # 🧠 MEDMIRA – Backend
 [![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-API-green?logo=flask)](https://flask.palletsprojects.com/)
+[![PyPI version](https://img.shields.io/pypi/v/gliner?color=blue&label=GLiNER&logo=pypi)](https://pypi.org/project/gliner/)\
 [![MongoDB](https://img.shields.io/badge/MongoDB-Database-success?logo=mongodb)](https://www.mongodb.com/)
 [![Google Cloud](https://img.shields.io/badge/Google%20Cloud-Vision%20API-blue?logo=googlecloud)](https://cloud.google.com/vision)
 [![Twilio](https://img.shields.io/badge/Twilio-WhatsApp%20Reminders-ff6b6b?logo=twilio)](https://www.twilio.com/)
