@@ -1,8 +1,7 @@
-# backend/manual_prescription.py
 from flask import Blueprint, request, jsonify
 from bson import ObjectId
 from datetime import datetime
-from backend.models import db   # gives you the Mongo handle
+from backend.models import db
 
 manual_bp = Blueprint("manual", __name__, url_prefix="/api")
 
@@ -18,22 +17,35 @@ def add_manual_prescription():
     }
     Auth header:  Bearer <token>  (token == user _id for now)
     """
-    token = request.headers.get("Authorization","").replace("Bearer ","").strip()
+    # Extract and validate the token from the Authorization header
+    token = request.headers.get("Authorization", "").replace("Bearer ", "").strip()
     if not token or not ObjectId.is_valid(token):
         return jsonify({"error": "Invalid token"}), 401
 
+    # Get the JSON data from the request
     data = request.get_json(force=True)
+
+    # Validate the presence of required fields
+    required_fields = ["medicine_name", "dosage", "frequency", "duration"]
+    if not all(field in data for field in required_fields):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    # Create the prescription document
     doc = {
-        "user_id"     : token,                # we store the raw string _id
-        "medicine_name": data.get("medicine_name"),
-        "dosage"      : data.get("dosage"),
-        "frequency"   : data.get("frequency"),
-        "duration"    : data.get("duration"),
-        "source"      : "manual",
-        "created_at"  : datetime.utcnow().isoformat() + "Z"
+        "user_id": token,
+        "medicine_name": data["medicine_name"],
+        "dosage": data["dosage"],
+        "frequency": data["frequency"],
+        "duration": data["duration"],
+        "source": "manual",
+        "created_at": datetime.utcnow().isoformat() + "Z"
     }
+
+    # Attempt to insert the document into the database
     try:
         res = db.prescriptions.insert_one(doc)
         return jsonify({"prescription_id": str(res.inserted_id)}), 201
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        # Log the exception for debugging purposes
+        print(f"Error inserting prescription: {e}")
+        return jsonify({"error": "Failed to create prescription"}), 500
