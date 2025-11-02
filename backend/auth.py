@@ -1,10 +1,10 @@
 
 from flask import Blueprint, request, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
-from backend.models import User
+from backend.mongo_atlas import User
 from src.mongo_client import users_collection,db
 import datetime
-from backend.models import User
+from backend.mongo_atlas import User
 from backend.alarm import send_guardian_welcome
 from bson import ObjectId
 
@@ -14,7 +14,7 @@ users_collection = db["users"]
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/api")
 
-from backend.models import db   # Mongo handle
+from backend.mongo_atlas import db   # Mongo handle
 
 pres_bp = Blueprint("prescription", __name__, url_prefix="/api")
 

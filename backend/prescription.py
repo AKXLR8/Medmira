@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any
 import pymongo
 from flask import Blueprint, request, jsonify
-from backend.models import Prescription
+from backend.mongo_atlas import Prescription
 from main import main
 from bson import ObjectId
 import base64

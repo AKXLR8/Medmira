@@ -2,10 +2,10 @@
 import schedule
 import subprocess
 from datetime import datetime, timedelta
-from backend.models import alarms
+from backend.mongo_atlas import alarms
 from twilio.rest import Client
 import os
-from backend.models import db
+from backend.mongo_atlas import db
 
 _twilio = Client(os.getenv("TWILIO_SID"), os.getenv("TWILIO_TOKEN"))
 TWILIO_WHATSAPP = os.getenv("TWILIO_WHATSAPP")   # +14155238886

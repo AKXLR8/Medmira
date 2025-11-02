@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from bson import ObjectId
 from datetime import datetime
-from backend.models import db
+from backend.mongo_atlas import db
 
 manual_bp = Blueprint("manual", __name__, url_prefix="/api")
 
