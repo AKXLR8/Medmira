@@ -4,6 +4,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 ENV PORT=8080
+ENV PYTHONPATH=/app
 # Set the port number of workers (adjust this number as needed)
 ENV Gunicorn_workers=3
-CMD exec gunicorn --bind :$PORT --workers $Gunicorn_workers --threads 8 --timeout 0 app:app
+CMD ["gunicorn", "--bind", ":8080", "--workers", "3", "--threads", "8", "--timeout", "0", "app:app"]

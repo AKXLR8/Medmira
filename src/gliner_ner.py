@@ -1,35 +1,39 @@
-from gliner import GLiNER
+"""
+GLiNER inference – zero-download version.
+API 100 % identical to your old module so *no* caller code changes.
+"""
+import os
+import joblib
+from pathlib import Path
 from typing import Dict, List
 from collections import defaultdict
-import os            
-
-ner = GLiNER.from_pretrained("urchade/gliner_large_bio-v0.1")
 
 MEDICAL_LABELS = [
     "Drug", "Strength", "Dosage", "Frequency", "Duration",
     "Route", "Form", "Patient", "Doctor", "Date", "Age"
 ]
 
-# ---------- singleton holder ----------
-_ner_model = None
+# ---------- singleton ----------
+_MODEL = None
 
-def _get_gliner() -> GLiNER:
-    """Load once per container; reuse forever."""
-    global _ner_model
-    if _ner_model is None:
-        cache_dir = os.getenv("TRANSFORMERS_CACHE", "/app/models")
-        _ner_model = GLiNER.from_pretrained(
-            "urchade/gliner_large_bio-v0.1",
-            cache_dir=cache_dir
-        )
-    return _ner_model
+def _load_model():
+    global _MODEL
+    if _MODEL is None:
+        pkl = Path(__file__).with_name("gliner_model.pkl")
+        if not pkl.exists():
+            raise FileNotFoundError("gliner_model.pkl not found – run create_pkl.py first")
+        print("Loading GLiNER from gliner_model.pkl …")   # ← NEW
+        _MODEL = joblib.load(pkl)
+        print("GLiNER pickle ready – model id:", id(_MODEL))  # ← NEW
+    return _MODEL
 
 # ---------- public helper ----------
 def extract_entities(text: str, labels: List[str] = MEDICAL_LABELS) -> Dict[str, List[Dict]]:
-    print("Extracting text:", text)
-    model = _get_gliner()          # first call triggers download
+    """
+    Identical signature & return shape as before.
+    """
+    model = _load_model()
     entities = model.predict_entities(text, labels, threshold=0.30)
-    print("Extracted raw entities:", entities)
 
     # ---- your original de-duplication & sorting ----
     best: Dict[tuple, float] = defaultdict(float)
@@ -44,5 +48,3 @@ def extract_entities(text: str, labels: List[str] = MEDICAL_LABELS) -> Dict[str,
         lst.sort(key=lambda x: x["score"], reverse=True)
 
     return out
-
-
