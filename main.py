@@ -51,6 +51,14 @@ class PrescriptionReader:
         self.data_validator = DataValidator()
         self.logger.info("Prescription reading system initialized")
 
+def main():
+    args = parser.parse_args()
+    if args.verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
+
+    reader = PrescriptionReader()
+    start_time = datetime.utcnow()
+
     def process_prescription(self, image_path: str, store_in_db: bool = True) -> dict:
         start_time = datetime.utcnow()
         try:

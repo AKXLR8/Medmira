@@ -58,5 +58,4 @@ print(app.url_map)
 print("===============")
 
 if __name__ == "__main__":
-        WSGIRequestHandler.timeout = 60 
-        app.run(host="0.0.0.0", port=8080, debug=True)
+    app.run(host='0.0.0.0.0', port=8080, debug=True)
