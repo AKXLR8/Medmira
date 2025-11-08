@@ -20,35 +20,37 @@ _LOGGER = logging.getLogger(__name__)
 # ------------------------- CREDENTIAL LOADING -------------------------
 def _load_credentials():
     """
-    1.  Cloud Run:  reads JSON string from env-var GCLOUD_API_JSON
-    2.  Local:      falls back to /app/api.json file
-    Returns: google.auth Credentials object
+    1. If GCLOUD_API_JSON contains JSON → parse it
+    2. If GCLOUD_API_JSON is a path → read the file
+    3. Else fallback to /app/api.json
     """
-    # 1️⃣  try env-var first (Cloud Run)
     json_str = os.getenv("GCLOUD_API_JSON")
+
     if json_str:
+        # Case A: env var contains actual JSON text
         try:
             info = json.loads(json_str)
-            _LOGGER.info("✅ Using Vision credentials from env-var GCLOUD_API_JSON")
+            _LOGGER.info("✅ Using Vision credentials from JSON env-var")
             return service_account.Credentials.from_service_account_info(info)
-        except Exception as e:
-            _LOGGER.error("❌ Invalid GCLOUD_API_JSON env-var: %s", e)
-            raise
+        except json.JSONDecodeError:
+            # Case B: env-var is a file path
+            try:
+                key_path = pathlib.Path(json_str)
+                with key_path.open() as f:
+                    info = json.load(f)
+                _LOGGER.info("✅ Using Vision credentials from file path in GCLOUD_API_JSON")
+                return service_account.Credentials.from_service_account_info(info)
+            except Exception as e:
+                _LOGGER.error("❌ GCLOUD_API_JSON was neither valid JSON nor a readable file path: %s", e)
+                raise
 
-    # 2️⃣  fall back to local file
+    # Fallback to local
     key_file = pathlib.Path(__file__).resolve().parent.parent / "api.json"
-    if key_file.is_file():
-        try:
-            _LOGGER.info("✅ Using Vision credentials from file %s", key_file)
-            return service_account.Credentials.from_service_account_file(key_file)
-        except Exception as e:
-            _LOGGER.error("❌ Failed to load %s: %s", key_file, e)
-            raise
+    if key_file.exists():
+        _LOGGER.info("✅ Using Vision credentials from file %s", key_file)
+        return service_account.Credentials.from_service_account_file(key_file)
 
-    # 3️⃣  nothing worked – hard stop
-    raise RuntimeError(
-        "Vision API credentials not found. Set GCLOUD_API_JSON env-var or place api.json at /app/api.json"
-    )
+    raise RuntimeError("Vision API credentials not found")
 
 
 # ------------------------- CLIENT CLASS -------------------------

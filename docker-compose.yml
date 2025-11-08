@@ -12,6 +12,6 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - MONGO_URI=mongodb://mongo:27017/akshayDB
+      - MONGO_URI=mongodb+srv://akshaymaniyampara_db:JQWtOJYss2saUL2L@cluster0.7tpjgzs.mongodb.net/?appName=Cluster0
     depends_on:
       - mongo
