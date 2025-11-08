@@ -1,3 +1,4 @@
 api.json 
 .env
 __pycache__/ 
+api.min.json

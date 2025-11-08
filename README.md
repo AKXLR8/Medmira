@@ -59,7 +59,7 @@ DATABASE_NAME="medmira"
 GCLOUD_API_JSON='{"type":"service_account","project_id":"xxx"...}'
 TWILIO_SID="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 TWILIO_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-TWILIO_WHATSAPP="+14155238886"
+TWILIO_WHATSAPP="+xxxxxxxxxx"
 ```
 
 ---
