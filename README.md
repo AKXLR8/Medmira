@@ -131,7 +131,8 @@ backend/
 ├── app.py                 # Flask entry point
 ├── alarm.py               # Twilio WhatsApp reminders
 ├── auth.py                # /api/register, /api/login
-├── gliner_ner.py          # GLiNER model + NER pipeline
+├── Create_PKL.py          # Creates GLiNER model into .PKL 
+├── gliner_ner.py          #NER pipeline + fetches the GLiNER_model.pkl
 ├── vision_client.py       # Google Vision OCR
 ├── prescription.py        # /api/upload, /api/scan, /api/history
 ├── manual_prescription.py # Manual entry API
